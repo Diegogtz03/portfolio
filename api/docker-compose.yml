@@ -1,0 +1,37 @@
+version: "3"
+services:
+  api:
+    container_name: api
+    build: .
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes: 
+      - .:/api
+    depends_on:
+      - psqldb
+    networks:
+      - app-network
+
+  psqldb:
+    container_name: psqldb
+    image: postgres
+    restart: always
+    ports:
+      - 5433:5432
+    env_file:
+      - .env
+    volumes:
+      - mydatabase:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mydatabase:
+  
