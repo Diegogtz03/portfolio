@@ -9,9 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.624.0",
+    "@aws-sdk/s3-request-presigner": "^3.627.0",
+    "@types/howler": "^2.2.11",
+    "@types/react-howler": "^5.2.3",
+    "gsap": "^3.12.5",
+    "howler": "^2.2.4",
+    "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.5"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "typescript": "^5",
