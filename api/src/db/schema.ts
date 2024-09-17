@@ -21,7 +21,9 @@ export const project = pgTable("project", {
   subtitle: text("subtitle"),
   description: text("description"),
   tags: text("tags"),
-  link: text("link")
+  link: text("link"),
+  date: timestamp("date", { mode: "date" }),
+  shown: boolean("shown").$defaultFn(() => true)
 })
 
 export const skill = pgTable("skill", {
@@ -34,13 +36,20 @@ export const skill = pgTable("skill", {
   is_hobbie: boolean("is_hobbie").$defaultFn(() => false)
 })
 
-
 export const image = pgTable("image", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   alt: text("alt"),
   url: text("url"),
+})
+
+export const project_skill = pgTable("project_skill", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  project_id: text("project_id").references(() => project.id),
+  skill_id: text("skill_id").references(() => skill.id),
 })
 
 export const project_image = pgTable("project_image", {
