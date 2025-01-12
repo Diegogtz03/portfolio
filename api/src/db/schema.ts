@@ -3,15 +3,27 @@ import {
   integer,
   timestamp,
   text,
-  boolean
-} from "drizzle-orm/pg-core"
+  boolean,
+} from "drizzle-orm/pg-core";
 
-import { drizzle } from "drizzle-orm/postgres-js"
-import postgres from 'postgres';
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-const postgres_connections = postgres(`postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`);
+const postgres_connections = postgres(
+  `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`
+);
 
-export const db = drizzle(postgres_connections)
+export const db = drizzle(postgres_connections);
+
+export const token = pgTable("token", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  token: text("token"),
+  type: text("type"),
+  expires: integer("expires"),
+  generated_at: timestamp("generated_at").$defaultFn(() => new Date()),
+});
 
 export const project = pgTable("project", {
   id: text("id")
@@ -22,9 +34,11 @@ export const project = pgTable("project", {
   description: text("description"),
   tags: text("tags"),
   link: text("link"),
-  date: timestamp("date", { mode: "date" }),
-  shown: boolean("shown").$defaultFn(() => true)
-})
+  date: timestamp("date", { mode: "string" }).$defaultFn(
+    () => new Date().toISOString().split("T")[0]
+  ),
+  shown: boolean("shown").$defaultFn(() => true),
+});
 
 export const skill = pgTable("skill", {
   id: text("id")
@@ -33,8 +47,9 @@ export const skill = pgTable("skill", {
   name: text("name"),
   image_id: text("image_id").references(() => image.id),
   highlighted: boolean("highlighted").$defaultFn(() => false),
-  is_hobbie: boolean("is_hobbie").$defaultFn(() => false)
-})
+  is_hobbie: boolean("is_hobbie").$defaultFn(() => false),
+  is_language: boolean("is_language").$defaultFn(() => true),
+});
 
 export const image = pgTable("image", {
   id: text("id")
@@ -42,7 +57,7 @@ export const image = pgTable("image", {
     .$defaultFn(() => crypto.randomUUID()),
   alt: text("alt"),
   url: text("url"),
-})
+});
 
 export const project_skill = pgTable("project_skill", {
   id: text("id")
@@ -50,7 +65,7 @@ export const project_skill = pgTable("project_skill", {
     .$defaultFn(() => crypto.randomUUID()),
   project_id: text("project_id").references(() => project.id),
   skill_id: text("skill_id").references(() => skill.id),
-})
+});
 
 export const project_image = pgTable("project_image", {
   id: text("id")
@@ -58,7 +73,8 @@ export const project_image = pgTable("project_image", {
     .$defaultFn(() => crypto.randomUUID()),
   project_id: text("project_id").references(() => project.id),
   image_id: text("image_id").references(() => image.id),
-})
+  order: integer("order").$defaultFn(() => 0),
+});
 
 export const blog = pgTable("blog", {
   id: text("id")
@@ -70,16 +86,16 @@ export const blog = pgTable("blog", {
   header_image_id: text("header_image_id").references(() => image.id),
   likes: integer("likes"),
   dislikes: integer("dislikes"),
-  highlighted: boolean("highlighted").$defaultFn(() => false)
-})
+  highlighted: boolean("highlighted").$defaultFn(() => false),
+});
 
 export const blog_image = pgTable("blog_image", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-    blog_id: text("blog_id").references(() => blog.id),
+  blog_id: text("blog_id").references(() => blog.id),
   image_id: text("image_id").references(() => image.id),
-})
+});
 
 export const song = pgTable("song", {
   id: text("id")
@@ -87,8 +103,8 @@ export const song = pgTable("song", {
     .$defaultFn(() => crypto.randomUUID()),
   song_uuid: text("song_uuid"),
   note: text("note").$defaultFn(() => ""),
-  highlighted: boolean("highlighted").$defaultFn(() => false)
-})
+  highlighted: boolean("highlighted").$defaultFn(() => false),
+});
 
 export const media = pgTable("media", {
   id: text("id")
@@ -98,14 +114,14 @@ export const media = pgTable("media", {
   stars: integer("stars"),
   note: text("note").$defaultFn(() => ""),
   highlighted: boolean("highlighted").$defaultFn(() => false),
-  is_tv_show: boolean("is_tv_show").$defaultFn(() => false)
-})
+  is_tv_show: boolean("is_tv_show").$defaultFn(() => false),
+});
 
-export type Image = typeof image.$inferSelect
-export type Project = typeof project.$inferSelect
-export type Skill = typeof skill.$inferSelect
-export type Project_Image = typeof project_image.$inferSelect
-export type Blog = typeof blog.$inferSelect
-export type Blog_Image = typeof blog_image.$inferSelect
-export type Song = typeof song.$inferSelect
-export type Media = typeof media.$inferSelect
+export type Image = typeof image.$inferSelect;
+export type Project = typeof project.$inferSelect;
+export type Skill = typeof skill.$inferSelect;
+export type Project_Image = typeof project_image.$inferSelect;
+export type Blog = typeof blog.$inferSelect;
+export type Blog_Image = typeof blog_image.$inferSelect;
+export type Song = typeof song.$inferSelect;
+export type Media = typeof media.$inferSelect;

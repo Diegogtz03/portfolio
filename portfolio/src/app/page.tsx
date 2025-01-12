@@ -1,17 +1,15 @@
-"use client"
+"use client";
 
 import MonitorText from "@/components/MonitorText/MonitorText";
 import gsap from "gsap";
 
 export default function Home() {
-  const runPageTransition = ():void => {
-    gsap.to('.this',
-      {
-        duration: 2,
-        backgroundColor: 'white'
-      }
-    )
-  }
+  const runPageTransition = (): void => {
+    gsap.to(".this", {
+      duration: 2,
+      backgroundColor: "white",
+    });
+  };
 
   return (
     <main>

@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        "dark-bg": "#161616"
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -29,7 +32,11 @@ const config: Config = {
       },
       animation: {
         dots: 'dots 1.5s steps(3, end) infinite',
+        'spin-slow': 'spin 15s linear infinite',
       },
+      fontSize: {
+        '12xl': '14rem'
+      }
     },
   },
   plugins: [],

@@ -1,20 +1,37 @@
 import { SimplifiedProjectList } from "@/interfaces/projects";
-import { DemoProjectCreator } from "@/components/DemoProjectCreator/DemoProjectCreator";
+import ProjectEditor from "@/components/admin/ProjectEditor/ProjectEditor";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
-  let data = await fetch('http://localhost:8080/projects', {
-    method:"GET",
-    cache: "no-store"
-  })
-  let projects = await data.json() as SimplifiedProjectList
+  const session = await getServerSession();
+
+  if (!session) {
+    redirect("/admin");
+  }
+
+  const myHeaders = new Headers();
+  myHeaders.append("X-API-Key", process.env.API_AUTH_TOKEN as string);
+
+  let projectsResult = await fetch(`${process.env.API_ROOT_ROUTE}/projects`, {
+    method: "GET",
+    cache: "no-store",
+    headers: myHeaders,
+  });
+
+  if (!projectsResult.ok) {
+    return (
+      <div className="flex flex-col gap-4 p-5 text-white">
+        Failed to fetch projects
+      </div>
+    );
+  }
+
+  let projects = (await projectsResult.json()) as SimplifiedProjectList;
 
   return (
-    <main>
-      <p className="text-white">
-        LENGTH: {projects.projects.length}
-      </p>
-
-      <DemoProjectCreator />
-    </main>
+    <div className="flex flex-col gap-4 p-10">
+      <ProjectEditor projects={projects} />
+    </div>
   );
 }
