@@ -5,6 +5,7 @@ import { projectRouter } from "./routes/project.router";
 import { musicRouter } from "./routes/music.router";
 import { skillsRouter } from "./routes/skills.router";
 import { authenticateApiKey } from "./utils/middleware";
+import { mediaRouter } from "./routes/media.router";
 
 let corsOptions = {
   origin: process.env.CORS_ORIGIN || "*",
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
 app.use("/projects", projectRouter);
 app.use("/music", musicRouter);
 app.use("/skills", skillsRouter);
+app.use("/media", mediaRouter);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
