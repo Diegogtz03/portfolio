@@ -28,7 +28,7 @@ export default function SkillEditor({ skills }: { skills: SkillDataList }) {
 
     const imageUploadUrl = await uploadImageToBucket("skills", imageData);
 
-    await fetch("http://localhost:3001/api/skills", {
+    await fetch("http://localhost:3000/api/skills", {
       method: "POST",
       body: JSON.stringify({
         name,
