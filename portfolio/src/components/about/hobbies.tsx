@@ -36,7 +36,7 @@ export default function Hobbies() {
   return (
     <div className="grid grid-cols-3 grid-rows-4 gap-4 w-full h-full sm:pb-20 pb-10 sm:px-20 px-4">
       {hobbies.map((hobby, index) => (
-        <HobbieCard hobby={hobby} index={index} />
+        <HobbieCard key={index} hobby={hobby} index={index} />
       ))}
     </div>
   );

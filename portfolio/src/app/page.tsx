@@ -12,6 +12,9 @@ import localFont from "next/font/local";
 // @ts-ignore
 import buzz from "buzz";
 
+// @ts-ignore
+const buzz = typeof window !== "undefined" ? require("buzz") : null;
+
 const manifold = localFont({
   src: "../../public/media/fonts/manifold-thin.otf",
 });
@@ -28,7 +31,9 @@ class SoundPlayer {
   CROSS_FADE_DURATION = 5000;
 
   constructor({ songList }: { songList: string[] }) {
-    this.intro = new buzz.sound("/media/sounds/intro.mp3");
+    this.intro =
+      typeof window !== "undefined" &&
+      new buzz.sound("/media/sounds/intro.mp3");
     this.hasPlayedIntro = false;
     this.musicStarted = false;
     this.songList = songList;
@@ -71,10 +76,12 @@ class SoundPlayer {
         this.currentSong.fadeOut(this.CROSS_FADE_DURATION);
       }
 
-      this.currentSong = new buzz.sound(`/media/music/${this.getNextSong()}`, {
-        loop: false,
-        volume: this.volume,
-      });
+      this.currentSong =
+        typeof window !== "undefined" &&
+        new buzz.sound(`/media/music/${this.getNextSong()}`, {
+          loop: false,
+          volume: this.volume,
+        });
 
       this.currentSong.play().fadeIn(this.CROSS_FADE_DURATION);
 
@@ -122,9 +129,9 @@ class SoundPlayer {
 
       // play transition sound
       setTimeout(() => {
-        const transitionSound = new buzz.sound(
-          "/media/sounds/severanceElevator.mp3"
-        );
+        const transitionSound =
+          typeof window !== "undefined" &&
+          new buzz.sound("/media/sounds/severanceElevator.mp3");
 
         transitionSound
           .play({
@@ -160,7 +167,8 @@ export default function Home() {
   );
   const [videoBorderAmount, setVideoBorderAmount] = useState<number>(0);
 
-  const isPhone = window ? window.innerWidth <= 600 : false;
+  const isPhone =
+    typeof window !== "undefined" ? window.innerWidth <= 600 : false;
 
   let soundPlayer: SoundPlayer;
   const borderAnimationControls = useAnimationControls();
@@ -263,7 +271,7 @@ export default function Home() {
 
         // On end, redirect to /home
         setTimeout(() => {
-          if (window) {
+          if (typeof window !== "undefined") {
             window.location.href = "/home";
           }
         }, 2800);
@@ -486,7 +494,7 @@ export default function Home() {
                         src="https://cdn.lottielab.com/l/chu2FzKjGoCMd0.html"
                         width="200"
                         height="200"
-                        className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-20 max-h-15 overflow-hidden aspect-square [clip-path:inset(0_0_20%_0)] z-[150] rotate-180 -bottom-[28%]"
+                        className="absolute left-1/2 -translate-x-1/2 w-20 h-20 max-h-15 overflow-hidden aspect-square [clip-path:inset(0_0_20%_0)] z-[150] rotate-180 -bottom-[28%]"
                       />
                     </motion.div>
                   )}

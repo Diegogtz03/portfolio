@@ -32,9 +32,9 @@ export const uploadImageToBucket = async (
   }
 };
 
-export const deleteImageFromBucket = async (url: string) => {
-  const params = {
-    Bucket: SPACES_BUCKET || "",
-    Key: `${folder}/${data.name}.${data.image.type.split("/")[1]}`,
-  };
-};
+// export const deleteImageFromBucket = async (url: string) => {
+//   const params = {
+//     Bucket: SPACES_BUCKET || "",
+//     Key: `${folder}/${data.name}.${data.image.type.split("/")[1]}`,
+//   };
+// };

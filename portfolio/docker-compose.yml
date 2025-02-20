@@ -1,0 +1,14 @@
+version: "3"
+services:
+  myportfolio:
+    container_name: myportfolio
+    build: .
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - router-network
+
+networks:
+  router-network:
+    external: true

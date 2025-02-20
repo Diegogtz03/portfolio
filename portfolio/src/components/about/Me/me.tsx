@@ -21,10 +21,11 @@ export default function Me() {
         </div>
         <div className="flex flex-col gap-2">
           <p className="sm:text-lg text-[15px] text-gray-400 text-center font-light px-10">
-            Hi! I'm Diego (or "Guti" as most call me). I'm a 4th year Computer
-            Science student at Tecnologico de Monterrey. I'm currently working
-            as a Software Engineer Intern at Microsoft. My interests vary from
-            software development to design and everything in between.
+            Hi! I&apos;m Diego (or &quot;Guti&quot; as most call me). I&apos;m a
+            4th year Computer Science student at Tecnologico de Monterrey.
+            I&apos;m currently working as a Software Engineer Intern at
+            Microsoft. My interests vary from software development to design and
+            everything in between.
           </p>
         </div>
         <LanguageScroll />
