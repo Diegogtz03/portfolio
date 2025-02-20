@@ -10,4 +10,4 @@ COPY . .
 
 CMD ["bun", "src/app.ts"]
 
-EXPOSE 8080
+EXPOSE 3101

@@ -1,7 +1,7 @@
 import { Experience } from "@/interfaces/experience";
 import ExperienceCard from "@/components/experience/ExperienceCard";
 
-export const experience: Experience[] = [
+const experience: Experience[] = [
   {
     id: "1",
     company: "Microsoft",

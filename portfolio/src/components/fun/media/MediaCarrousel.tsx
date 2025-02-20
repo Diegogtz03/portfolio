@@ -235,8 +235,11 @@ function MediaCard({
               </div>
               {/* Genres */}
               <div className="flex flex-row gap-2">
-                {media.genres?.map((genre) => (
-                  <div className="flex flex-row gap-2 rounded-full bg-gray-200 p-2 w-fit px-3">
+                {media.genres?.map((genre, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-row gap-2 rounded-full bg-gray-200 p-2 w-fit px-3"
+                  >
                     <h3 className="text-gray-700 text-sm select-none">
                       {genre}
                     </h3>
