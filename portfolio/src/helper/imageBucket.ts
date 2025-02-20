@@ -16,7 +16,7 @@ export const uploadImageToBucket = async (
   };
 
   try {
-    let res = await fetch("http://localhost:3001/api/images", {
+    let res = await fetch("http://localhost:3000/api/images", {
       method: "POST",
       body: JSON.stringify({ params: params }),
       headers: {
