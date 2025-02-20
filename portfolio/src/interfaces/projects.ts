@@ -24,3 +24,40 @@ export interface ProjectList {
 export interface SimplifiedProjectList {
   projects: SimplifiedProject[];
 }
+
+export interface ProjectLink {
+  name: string;
+  link: string;
+}
+
+export interface ProjectImage {
+  src: string
+  width: number
+  height: number
+  aspect_ratio: string
+}
+
+
+export interface ProjectType {
+  id: string;
+  name: string;
+  subtitle: string;
+  description: string;
+  tag: string;
+  links: ProjectLink[];
+  date: string;
+  accentColor: string;
+  icon: string;
+  backdrop: string;
+  images: ProjectImage[];
+  shown: boolean;
+}
+
+export interface SimplifiedProjectType {
+  id: string;
+  name: string;
+  subtitle: string;
+  icon: string;
+  backdrop: string;
+  shown: boolean;
+}
