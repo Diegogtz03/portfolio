@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3101;
 
 app.get("/", (req, res) => {
   res.send("Welcome to Guti's API");
