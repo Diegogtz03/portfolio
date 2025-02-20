@@ -17,8 +17,8 @@ COPY . .
 # Build the Next.js application
 RUN bun run build
 
-# Expose the port the app runs on
-EXPOSE 3100
-
 # Start the application
 CMD ["bun", "run", "start"]
+
+# Expose the port the app runs on
+EXPOSE 3100
