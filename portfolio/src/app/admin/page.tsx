@@ -25,30 +25,30 @@ export default function Home() {
     <main className="flex justify-center items-center h-screen bg-dark-bg">
       {status === "authenticated" ? (
         <div className="flex flex-col gap-4 text-white">
-          <Link
+          {/* <Link
             href="/admin/projects"
             className="bg-gray-800 text-white rounded-md p-2 hover:bg-gray-700"
           >
             Projects
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             href="/admin/skills"
             className="bg-gray-800 text-white rounded-md p-2 hover:bg-gray-700"
           >
             Skills
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             href="/admin/contact"
             className="bg-gray-800 text-white rounded-md p-2 hover:bg-gray-700"
           >
             Contact
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             href="/admin/blog"
             className="bg-gray-800 text-white rounded-md p-2 hover:bg-gray-700"
           >
             Blog
-          </Link>
+          </Link> */}
           <Link
             href="/admin/fun"
             className="bg-gray-800 text-white rounded-md p-2 hover:bg-gray-700"

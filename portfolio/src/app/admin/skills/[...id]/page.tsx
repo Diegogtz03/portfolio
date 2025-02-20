@@ -19,7 +19,7 @@ export default function Skill({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchSkill = async () => {
       const skill = await fetch(
-        `http://localhost:3001/api/skills/${params.id}`,
+        `http://localhost:3000/api/skills/${params.id}`,
         {
           method: "GET",
           cache: "no-store",
@@ -54,7 +54,7 @@ export default function Skill({ params }: { params: { id: string } }) {
       imageUploadUrl = await uploadImageToBucket("skills", pictureData);
     }
 
-    const res = await fetch(`http://localhost:3001/api/skills/${params.id}`, {
+    const res = await fetch(`http://localhost:3000/api/skills/${params.id}`, {
       method: "PUT",
       body: JSON.stringify({
         name,
