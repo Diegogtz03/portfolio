@@ -1,113 +1,505 @@
+"use client";
+
+import ShaderLogo from "@/components/home/ShaderLogo";
+import gsap from "gsap";
+import { motion, useAnimationControls, AnimatePresence } from "motion/react";
+import { useState, useEffect, useRef } from "react";
+import { GlowEffect } from "@/components/ui/glow-effect";
 import Image from "next/image";
+import useMouseDistanceStore from "@/helper/mouseDistance";
+import localFont from "next/font/local";
+
+// @ts-ignore
+import buzz from "buzz";
+
+const manifold = localFont({
+  src: "../../public/media/fonts/manifold-thin.otf",
+});
+
+class SoundPlayer {
+  intro: buzz.sound;
+  currentSong: buzz.sound;
+  hasPlayedIntro: boolean;
+  musicStarted: boolean;
+  volume: number;
+  songList: string[];
+  queue: string[];
+
+  CROSS_FADE_DURATION = 5000;
+
+  constructor({ songList }: { songList: string[] }) {
+    this.intro = new buzz.sound("/media/sounds/intro.mp3");
+    this.hasPlayedIntro = false;
+    this.musicStarted = false;
+    this.songList = songList;
+    this.queue = songList.sort(() => Math.random() - 0.5);
+    this.volume = 50;
+  }
+
+  playIntro() {
+    if (!this.hasPlayedIntro) {
+      this.intro.play().fadeIn(this.CROSS_FADE_DURATION);
+      this.hasPlayedIntro = true;
+
+      this.intro.bind("ended", () => {
+        setTimeout(() => {
+          this.startMusic();
+        }, 2000);
+      });
+
+      this.intro.bind("timeupdate", () => {
+        if (
+          this.intro.getTime() >=
+          this.intro.getDuration() - this.CROSS_FADE_DURATION / 1000
+        ) {
+          this.intro.fadeOut(this.CROSS_FADE_DURATION);
+
+          this.intro.unbind("timeupdate");
+        }
+      });
+    }
+  }
+
+  startMusic() {
+    this.musicStarted = true;
+    this.playNextSong();
+  }
+
+  playNextSong() {
+    if (this.musicStarted) {
+      if (this.currentSong) {
+        this.currentSong.fadeOut(this.CROSS_FADE_DURATION);
+      }
+
+      this.currentSong = new buzz.sound(`/media/music/${this.getNextSong()}`, {
+        loop: false,
+        volume: this.volume,
+      });
+
+      this.currentSong.play().fadeIn(this.CROSS_FADE_DURATION);
+
+      this.currentSong.bind("timeupdate", () => {
+        if (
+          this.currentSong.getTime() >=
+          this.currentSong.getDuration() - this.CROSS_FADE_DURATION / 1000
+        ) {
+          this.playNextSong();
+        }
+      });
+    }
+  }
+
+  getNextSong() {
+    if (this.queue.length > 0) {
+      return this.queue.shift();
+    } else {
+      this.queue = this.songList.sort(() => Math.random() - 0.5);
+      return this.queue.shift();
+    }
+  }
+
+  setVolume(volume: number) {
+    if (this.currentSong && this.musicStarted) {
+      this.currentSong.setVolume(volume);
+      this.volume = volume;
+    }
+  }
+
+  togglePause() {
+    if (this.currentSong) {
+      this.currentSong.togglePlay();
+    }
+  }
+
+  playTransitionSound() {
+    if (this.currentSong) {
+      // fade out current song
+      this.currentSong.fadeOut(200);
+
+      setTimeout(() => {
+        this.currentSong.togglePlay();
+      }, 200);
+
+      // play transition sound
+      setTimeout(() => {
+        const transitionSound = new buzz.sound(
+          "/media/sounds/severanceElevator.mp3"
+        );
+
+        transitionSound
+          .play({
+            volume: 1,
+          })
+          .fadeOut(5000);
+
+        transitionSound.setSpeed(2);
+      }, 300);
+    }
+  }
+}
 
 export default function Home() {
+  const normalVideoRef = useRef<HTMLVideoElement>(null);
+  const reversedVideoRef = useRef<HTMLVideoElement>(null);
+  const [video, setVideo] = useState<string>("");
+  const [isReversed, setIsReversed] = useState<boolean>(false);
+  const [hasLogoHovered, setHasLogoHovered] = useState<boolean>(false);
+  const [userInitialClicked, setUserInitialClicked] = useState<boolean>(false);
+  const [
+    initialAnimationStageOneComplete,
+    setInitialAnimationStageOneComplete,
+  ] = useState<boolean>(false);
+  const [
+    initialAnimationStageTwoComplete,
+    setInitialAnimationStageTwoComplete,
+  ] = useState<boolean>(false);
+  const [isGlowEffectActive, setIsGlowEffectActive] = useState(false);
+  const distance = useMouseDistanceStore((state) => state.distance);
+  const [soundPlayerState, setSoundPlayerState] = useState<SoundPlayer | null>(
+    null
+  );
+  const [videoBorderAmount, setVideoBorderAmount] = useState<number>(0);
+
+  const isPhone = window ? window.innerWidth <= 600 : false;
+
+  let soundPlayer: SoundPlayer;
+  const borderAnimationControls = useAnimationControls();
+
+  useEffect(() => {
+    fetch("/api/videos")
+      .then((res) => res.json())
+      .then((data) => {
+        let selectedVideo = data[Math.floor(Math.random() * data.length)];
+
+        if (selectedVideo.includes("_rev")) {
+          selectedVideo = selectedVideo.split("_rev")[0] + ".mp4";
+        }
+
+        setVideo(selectedVideo);
+      });
+
+    fetch("/api/music")
+      .then((res) => res.json())
+      .then((data) => {
+        soundPlayer = new SoundPlayer({ songList: data });
+        setSoundPlayerState(soundPlayer);
+      });
+
+    document.addEventListener("click", handleUserInitialClick);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("click", handleUserInitialClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (userInitialClicked) {
+      const newVolume = Math.min(
+        100,
+        Math.max(0, ((500 - distance) / 500) * 100)
+      );
+
+      soundPlayerState?.setVolume(newVolume);
+    }
+
+    const edgeSize = Math.min(100, Math.max(0, ((300 - distance) / 300) * 100));
+    // setEdgeSize(edgeSize);
+  }, [distance, soundPlayerState]);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === " " || e.key === "Spacebar") {
+      if (soundPlayer) {
+        soundPlayer.playNextSong();
+      }
+    } else if (e.key === "m" || e.key === "M") {
+      soundPlayer.togglePause();
+    }
+  };
+
+  const handleUserInitialClick = () => {
+    if (!userInitialClicked) {
+      setUserInitialClicked(true);
+      setInitialAnimationStageOneComplete(true);
+      soundPlayer.playIntro();
+    }
+  };
+
+  // TODO: add page transition (tunnel, fade, etc)
+  const runPageTransition = (): void => {
+    if (isGlowEffectActive) {
+      soundPlayerState?.playTransitionSound();
+
+      setTimeout(() => {
+        if (isPhone) {
+          borderAnimationControls.start(
+            { border: "100px solid white" },
+            { duration: 1.5 }
+          );
+        } else {
+          borderAnimationControls.start(
+            { border: "250px solid white" },
+            { duration: 1.5 }
+          );
+        }
+
+        setTimeout(() => {
+          borderAnimationControls.start(
+            { border: "0px solid white" },
+            { duration: 0.3 }
+          );
+        }, 1800);
+
+        setTimeout(() => {
+          gsap.to("#overlay", {
+            duration: 0.8,
+            backgroundColor: "white",
+            opacity: 1,
+            zIndex: 10,
+          });
+        }, 2400);
+        // Fade all sounds out and play transition sound?
+
+        // On end, redirect to /home
+        setTimeout(() => {
+          if (window) {
+            window.location.href = "/home";
+          }
+        }, 2800);
+      }, 500);
+    }
+  };
+
+  const handleVideoEnd = () => {
+    if (isReversed) {
+      setIsReversed(false);
+      if (normalVideoRef.current) {
+        normalVideoRef.current.style.display = "block";
+        if (reversedVideoRef.current) {
+          reversedVideoRef.current.style.display = "none";
+        }
+        normalVideoRef.current.currentTime = 0;
+        normalVideoRef.current.play();
+      }
+    } else {
+      setIsReversed(true);
+      if (reversedVideoRef.current) {
+        reversedVideoRef.current.style.display = "block";
+        if (normalVideoRef.current) {
+          normalVideoRef.current.style.display = "none";
+        }
+        reversedVideoRef.current.currentTime = 0;
+        reversedVideoRef.current.play();
+      }
+    }
+  };
+
+  const handleLogoHover = (hover: boolean) => {
+    if (isGlowEffectActive) {
+      if (!hasLogoHovered) {
+        setHasLogoHovered(true);
+      }
+
+      if (hover) {
+        borderAnimationControls.start({
+          border: "20px solid white",
+          borderImage: "",
+        });
+
+        setVideoBorderAmount(20);
+      } else {
+        borderAnimationControls.start({ border: "0px solid white" });
+
+        setVideoBorderAmount(0);
+      }
+    }
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="bg-black">
+      <div
+        className="bg-transparent h-screen w-screen opacity-0 absolute"
+        id="overlay"
+      />
+      <AnimatePresence mode="wait">
+        {!initialAnimationStageTwoComplete && (
+          <motion.div
+            key={"stage-one-container"}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 4 }}
+            className="relative w-full h-screen bg-black"
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+            {!initialAnimationStageOneComplete && (
+              <motion.h1
+                key={"stage-one"}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 4 }}
+                className="absolute top-0 left-0 right-0 bottom-0 mx-auto my-auto flex items-center justify-center text-white tracking-wide"
+              >
+                <motion.span
+                  className={`text-2xl tracking-wide select-none`}
+                  animate={{ opacity: [1, 0, 1] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
+                  [&nbsp;&nbsp;
+                </motion.span>
+                <span
+                  className={`${manifold.className} text-2xl tracking-wider select-none`}
+                >
+                  click to enter
+                </span>
+                <motion.span
+                  className={`text-2xl tracking-wide select-none`}
+                  animate={{ opacity: [1, 0, 1] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
+                  &nbsp;&nbsp;]
+                </motion.span>
+              </motion.h1>
+            )}
+            {initialAnimationStageOneComplete &&
+              userInitialClicked &&
+              !initialAnimationStageTwoComplete && (
+                <motion.div
+                  key="stage-two"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 4 }}
+                  exit={{ opacity: 0 }}
+                  onAnimationComplete={() => {
+                    setInitialAnimationStageTwoComplete(true);
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+                    setTimeout(() => {
+                      if (normalVideoRef.current) {
+                        normalVideoRef.current.play();
+                      }
+                    }, 200);
+                  }}
+                  className="absolute top-0 left-0 right-0 bottom-0 mx-auto my-auto flex items-center justify-center"
+                >
+                  <Image
+                    src="/media/assets/lumon-slowed.gif"
+                    alt="lumon roledex"
+                    width={250}
+                    height={250}
+                  />
+                </motion.div>
+              )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {isGlowEffectActive && (
+        <GlowEffect
+          colors={[
+            "rgba(239, 223, 210, 0.5)",
+            "rgba(187, 187, 187, 0.5)",
+            "rgba(239, 223, 210, 0.5)",
+            "rgba(187, 187, 187, 0.5)",
+            "rgba(239, 223, 210, 0.5)",
+            "rgba(187, 187, 187, 0.5)",
+            "rgba(239, 223, 210, 0.5)",
+            "rgba(187, 187, 187, 0.5)",
+          ]}
+          duration={10}
+          blur="strongest"
+          mode="rotate"
         />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      )}
+      <motion.div
+        className="flex bg-black h-screen items-center justify-center"
+        initial={{ border: "0px solid black" }}
+        animate={borderAnimationControls}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex items-center justify-center h-full w-full relative">
+          {userInitialClicked && initialAnimationStageTwoComplete && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                onAnimationComplete={() => setIsGlowEffectActive(true)}
+                style={{
+                  width: "inherit",
+                  height: "inherit",
+                }}
+                className="bg-gray-200"
+                transition={{ duration: 15, delay: 4 }}
+              >
+                {video && (
+                  <video
+                    src={`/media/videos/${video}`}
+                    preload="auto"
+                    loop={false}
+                    muted
+                    className={`h-full w-full object-cover transition-all duration-700`}
+                    style={{ borderRadius: `${videoBorderAmount}px` }}
+                    ref={normalVideoRef}
+                    onEnded={handleVideoEnd}
+                  />
+                )}
+                {video && (
+                  <video
+                    style={{
+                      display: "none",
+                      borderRadius: `${videoBorderAmount}px`,
+                    }}
+                    src={`/media/videos/${video.split(".")[0]}_rev.mp4`}
+                    preload="auto"
+                    loop={false}
+                    muted
+                    className={`h-full w-full object-cover transition-all duration-700`}
+                    ref={reversedVideoRef}
+                    onEnded={handleVideoEnd}
+                  />
+                )}
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, scale: 1 }}
+                animate={{ opacity: 1 }}
+                whileHover={{
+                  scale: 1.1,
+                }}
+                transition={{ duration: 8, delay: 7 }}
+                style={{
+                  width: "fit-content",
+                  height: "fit-content",
+                  alignContent: "center",
+                  position: "absolute",
+                }}
+                onClick={() => runPageTransition()}
+              >
+                <AnimatePresence mode="wait">
+                  {!hasLogoHovered && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1, delay: 15 }}
+                      className="h-fit w-fit z-[150]"
+                    >
+                      <motion.iframe
+                        src="https://cdn.lottielab.com/l/chu2FzKjGoCMd0.html"
+                        width="200"
+                        height="200"
+                        className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-20 max-h-15 overflow-hidden aspect-square [clip-path:inset(0_0_20%_0)] z-[150] rotate-180 -bottom-[28%]"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <ShaderLogo
+                  onHover={handleLogoHover}
+                  cursorClass={isGlowEffectActive ? "cursor-pointer" : ""}
+                />
+              </motion.div>
+            </>
+          )}
+        </div>
+      </motion.div>
     </main>
   );
 }
