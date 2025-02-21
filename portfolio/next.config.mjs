@@ -27,12 +27,17 @@ const nextConfig = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: 'https://diegogtz.dev',
+            value: '*',
           },
         ],
       },
     ];
   },
+  experimental: {
+    serverActions: {
+      allowedOrigins: ["diegogtz.dev", "myportfolio:3000"]
+    }
+  }
 };
 
 export default nextConfig;
