@@ -29,18 +29,18 @@ export const LiveMusicDisplay = () => {
             return;
           }
           if (data.name !== liveMusic?.name) {
+            setPrevMusic(liveMusic);
+            setLiveMusic(data);
             setIsSliding(true);
 
-            setTimeout(() => {
-              setPrevMusic(liveMusic);
-              setLiveMusic(data);
-            }, 200);
+            // setTimeout(() => {
+            // }, 200);
 
             setTimeout(() => {
               setPrevMusic(liveMusic);
               setLiveMusic(data);
               setIsSliding(false);
-            }, 800);
+            }, 900);
           } else {
             setLiveMusic(data);
           }
