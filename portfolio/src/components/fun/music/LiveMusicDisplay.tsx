@@ -40,7 +40,7 @@ export const LiveMusicDisplay = () => {
               setPrevMusic(liveMusic);
               setLiveMusic(data);
               setIsSliding(false);
-            }, 500);
+            }, 800);
           } else {
             setLiveMusic(data);
           }
