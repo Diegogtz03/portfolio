@@ -37,10 +37,10 @@ export const LiveMusicDisplay = () => {
             }, 200);
 
             setTimeout(() => {
-              setPrevMusic(liveMusic);
-              setLiveMusic(data);
+              // setPrevMusic(liveMusic);
+              // setLiveMusic(data);
               setIsSliding(false);
-            }, 800);
+            }, 1000);
           } else {
             setLiveMusic(data);
           }
