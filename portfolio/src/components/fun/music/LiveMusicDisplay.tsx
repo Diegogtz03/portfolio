@@ -30,11 +30,11 @@ export const LiveMusicDisplay = () => {
           }
           if (data.name !== liveMusic?.name) {
             setPrevMusic(liveMusic);
-            setLiveMusic(data);
-            setIsSliding(true);
 
-            // setTimeout(() => {
-            // }, 200);
+            setTimeout(() => {
+              setLiveMusic(data);
+              setIsSliding(true);
+            }, 150);
 
             setTimeout(() => {
               setPrevMusic(liveMusic);
