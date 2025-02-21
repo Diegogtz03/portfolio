@@ -21,4 +21,4 @@ RUN bun run build
 CMD ["bun", "run", "start"]
 
 # Expose the port the app runs on
-EXPOSE 3100
+EXPOSE 3200
