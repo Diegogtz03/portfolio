@@ -32,7 +32,7 @@ export default function ExperienceCard({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="flex flex-col sm:flex-row gap-4 p-5 h-[620px] sm:h-fit overflow-scroll no-scrollbar">
+      <div className="flex flex-col sm:flex-row gap-4 p-5 h-[620px] sm:h-fit overflow-scroll overflow-x-hidden no-scrollbar">
         <div className="flex flex-col gap-4 w-full">
           <AnimatePresence mode="wait">
             <motion.div
