@@ -16,8 +16,12 @@ export default async function Media() {
 
   let mediaData: MediaList = await response.json();
 
-  let movies = mediaData.media.filter((media) => media.is_tv_show === false);
-  let tvShows = mediaData.media.filter((media) => media.is_tv_show === true);
+  let movies = mediaData.media
+    .filter((media) => media.is_tv_show === false)
+    .sort((a, b) => (b.highlighted ? -1 : 1));
+  let tvShows = mediaData.media
+    .filter((media) => media.is_tv_show === true)
+    .sort((a, b) => (b.highlighted ? -1 : 1));
 
   return (
     <main className="overflow-hidden w-screen h-screen">

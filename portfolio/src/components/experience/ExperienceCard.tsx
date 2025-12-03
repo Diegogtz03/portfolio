@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import SVGSticker from "./SVGSticker";
 
-const generalExperience = `I'm currently in my last semester of my bachelors in Computer Science. In the last couple of years I have worked in multiple positions that have expanded my knowledge. While I have practiced a lot of front-end development and it's one of my passions, I've also explored and enjoyed positions in other areas such as security and reliability.
+const generalExperience = `I will be joining Bloomberg as a Software Engineer in New York City. In the last couple of years I have worked in multiple positions that have expanded my knowledge across various domains of technology.
 
-My journey includes exciting internships at leading tech companies - I'm currently at Microsoft as a Software Engineer Intern, previously interned at Oracle, and completed a Site Reliability Engineering Fellowship with Meta & MLH. I've also taken on leadership roles, serving as a Project Leader at ITESM where I led development initiatives. Through these experiences, I've discovered that while I'm adaptable to many roles, I'm particularly drawn to visual and user-facing positions where I can combine my technical skills with my passion for design and user experience such as full-stack positions.`;
+My journey includes exciting internships at leading tech companies - I previously interned at Microsoft, Oracle, and completed a Site Reliability Engineering Fellowship with Meta & MLH. I've also taken on leadership roles, serving as a Project Leader at ITESM where I led development initiatives. Through these experiences, I've discovered my passion for innovation and versatility - from development and AI to design and everything in between. I'm particularly excited about roles where I can explore cutting-edge technologies while combining technical excellence with creative problem-solving.`;
 
 export default function ExperienceCard({
   experiences,

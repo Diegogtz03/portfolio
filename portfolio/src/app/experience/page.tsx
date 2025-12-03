@@ -4,10 +4,22 @@ import ExperienceCard from "@/components/experience/ExperienceCard";
 const experience: Experience[] = [
   {
     id: "1",
+    company: "Bloomberg",
+    position: "Software Engineer",
+    startDate: "2026",
+    endDate: "Future",
+    description: `Incoming Software Engineer at Bloomberg in New York City.
+    
+To be continued...`,
+    company_logo:
+      "https://guti.sfo3.digitaloceanspaces.com/experience/bloomberg.svg",
+  },
+  {
+    id: "2",
     company: "Microsoft",
     position: "Software Engineer Intern",
     startDate: "2025",
-    endDate: "Now",
+    endDate: "2025",
     description: `Currently interning with Microsoft's M365 Substrate team, working on implementing early regression detection tools in critical workflows.
     
 To be continued...`,
@@ -15,7 +27,7 @@ To be continued...`,
       "https://guti.sfo3.digitaloceanspaces.com/experience/microsoft.svg",
   },
   {
-    id: "2",
+    id: "3",
     company: "Oracle",
     position: "Software Engineer Intern",
     startDate: "2024",
@@ -29,7 +41,7 @@ Towards the end of my internship, I had the opportunity to build a robust creden
       "https://guti.sfo3.digitaloceanspaces.com/experience/oracle.svg",
   },
   {
-    id: "3",
+    id: "4",
     company: "Meta & MLH",
     position: "Site Reliability Engineer Fellow",
     startDate: "2023",
@@ -45,7 +57,7 @@ This experience provided me with comprehensive understanding of Production Engin
       "https://guti.sfo3.digitaloceanspaces.com/experience/meta.svg",
   },
   {
-    id: "4",
+    id: "5",
     company: "ITESM",
     position: "Project Leader",
     startDate: "2022",
@@ -53,18 +65,6 @@ This experience provided me with comprehensive understanding of Production Engin
     description: `Led a team of 3 programmers in creating interactive web courses, managing project timelines, design decisions and user interactions. Responsible for delivering 6 five-hour courses by June 2023, focusing on providing quality educational content.
 
 Oversaw all aspects of course development from planning to implementation, ensuring consistent design language and engaging user experience across all courses while meeting project deadlines.`,
-    company_logo:
-      "https://guti.sfo3.digitaloceanspaces.com/experience/itesm.svg",
-  },
-  {
-    id: "5",
-    company: "ITESM ",
-    position: "Front-end Developer",
-    startDate: "2022",
-    endDate: "2023",
-    description: `Created interactive and fun web courses, providing low-income communities a way to learn new things in an entertaining way impacting more than 40,000 people around Mexico.The site where the courses are uploaded to just surpassed 16 million visits. The courses were created using a combination of HTML, CSS, JavaScript and SCSS.
-    
-Worked with the organization to create a total new experience for the users, making the framework even more interactive. Updated the currently used framework and old processes to make the course creation experience a lot simpler and friendly to new programmers joining the group.`,
     company_logo:
       "https://guti.sfo3.digitaloceanspaces.com/experience/itesm.svg",
   },

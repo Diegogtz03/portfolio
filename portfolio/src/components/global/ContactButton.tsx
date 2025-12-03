@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 const SOCIAL_LINKS = {
   github: "https://github.com/Diegogtz03",
   linkedin: "https://www.linkedin.com/in/diegogtzt",
-  x: "https://x.com/diego_trevin",
+  x: "https://x.com/sudoguti",
 };
 
 export const ContactButton = () => {

@@ -1,6 +1,122 @@
 import { ProjectType, SimplifiedProjectType } from "@/interfaces/projects";
 
 export const projects: ProjectType[] = [
+  // ImmerseFM
+  {
+    id: "immerseFM",
+    name: "ImmerseFM",
+    date: "June 2025",
+    tag: "music",
+    subtitle: "Local music player",
+    accentColor: "#87AAEB",
+    icon: "logo.svg",
+    backdrop: "backdrop.png",
+    images: [
+      {
+        src: "1.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 9"
+      },
+      {
+        src: "2.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 11"
+      },
+      {
+        src: "3.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 11"
+      },
+      {
+        src: "4.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 9"
+      },
+      {
+        src: "5.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "9 / 13"
+      },
+    ],
+    links: [
+      { 
+        name: "site", 
+        link: "https://immerse.fm"
+      }
+    ],
+    description:
+      `ImmerseFM is the first local music player that allows users to play with their music in real time. Using an in-house developed engine, users can separate their music into stems in real time. This allows users to have a lot of fun with their music and to create new sounds and melodies. The player also intergrated a few tools like lyrics and effects to help users listen to their music in a new way.
+      
+      This was built using Tauri (Rust) and React, levering a local python service to handle some of the heavy audio processing through Unix Sockets.`,
+    shown: true,
+  },
+  // InsiderFM
+  {
+    id: "insiderFM",
+    name: "InsiderFM",
+    date: "October 2025",
+    tag: "startup",
+    subtitle: "AI powered music learning platform",
+    accentColor: "#87AAEB",
+    icon: "logo.svg",
+    backdrop: "background.png",
+    images: [
+      {
+        src: "1.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 7"
+      },
+      {
+        src: "2.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 7"
+      },
+      {
+        src: "3.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 7"
+      },
+      {
+        src: "4.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 7"
+      },
+      {
+        src: "5.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 7"
+      },
+      {
+        src: "6.png",
+        width: 2300,
+        height: 900,
+        aspect_ratio: "13 / 7"
+      },
+    ],
+    links: [
+      { 
+        name: "site", 
+        link: "https://insider.fm"
+      },
+      {
+        name: "app",
+        link: "https://app.insider.fm"
+      }
+    ],
+    description:
+      `InsiderFM is an AI powered music platform that allows users to learn how to play their favorite music and connect with other music lovers. It is a simple and easy to use platform that allows users to learn from their favorite music even if the platform doesn't have the song in its library yet. Artists can also leverage the platform to share exclusive content with their fans and grow their audience. The idea for this startup is to allow people who love music as much as me and my co-founders to share their knowledge and connect with other music lovers.`,
+    shown: true,
+  },
   // Know-X
   {
     id: "knowx",
@@ -189,6 +305,92 @@ export const projects: ProjectType[] = [
     `,
     shown: true,
   },
+  // Clip-it
+  {
+    id: "clip-it",
+    name: "Clip-it",
+    date: "January 2024",
+    tag: "iOS app",
+    subtitle: "...",
+    accentColor: "#F87518",
+    icon: "icon.svg",
+    backdrop: "backdrop.png",
+    images: [
+      {
+        src:"1.png", 
+        width: 900, 
+        height: 1900, 
+        aspect_ratio: "8 / 18"
+      },
+      {
+        src:"2.png", 
+        width: 900, 
+        height: 1900, 
+        aspect_ratio: "8 / 16"
+      },
+      {
+        src:"3.png", 
+        width: 900, 
+        height: 1900, 
+        aspect_ratio: "8 / 16"
+      },
+      {
+        src:"4.png", 
+        width: 900, 
+        height: 1900, 
+        aspect_ratio: "8 / 16"
+      },
+      {
+        src:"5.png", 
+        width: 900, 
+        height: 1900,  
+        aspect_ratio: "8 / 16"
+      },
+      {
+        src:"6.png", 
+        width: 900, 
+        height: 1900,  
+        aspect_ratio: "8 / 16"
+      },
+    ],
+    links: [
+      {
+        name: "repo",
+        link: "https://github.com/Diegogtz03/clip-it"
+      },
+      {
+        name: "x post",
+        link: "https://x.com/sudoguti/status/1762341139690959050"
+      }
+    ],
+    description: `
+      Clip-it was my 2024 WWDC student challenge submission. Inspired by my grandfather's Alzheimer's diagnosis, I created this iPhone app to help people cherish and preserve their daily moments and memories. The app allows users to quickly capture photos and audio recordings with annotations - whether it's a great song heard at the mall or a tasty snack at a friend's house. Built specifically for iOS, Clip-it serves as a reminder to value life's small but meaningful experiences, while honoring those affected by memory loss conditions. The app features an intuitive interface for recording, annotating and reviewing memories, though some features like photo capture require physical device testing rather than simulation.
+
+      I'm a fan of music, so having something that I can quickly grab and capture an audio is an amazing feature to me. Compared to things like Shazam, this allows to to have a place to re-listen to the recording, giving you an opportunity to maybe find the song. The amount of times this has happend to me is unbelievable!
+    `,
+    shown: true,
+  },
+  // Dots
+  {
+    id: "dots",
+    name: "Dots",
+    date: "Coming Soon...",
+    tag: "hardware",
+    subtitle: "Flip dot display and control software powered by AI",
+    accentColor: "#F87518",
+    icon: "icon.svg",
+    backdrop: "backdrop.png",
+    images: [],
+    links: [],
+    description: `
+      This is a project that I'm still planning and budgeting for LOL! But I've always loved physical and tangible tech, AKA hardware. I recently stumbled on something called a "flip-dot", which surprisingly is a very old technology but looks SUPER COOL! I like to think about them as old-school LED's LOL, it's essentially a two-state device which flips a tiny magnetic disc into two different positions. When it's magnetized to one pole it's white and when magnetized to the other it's black.
+
+      Researching a bit, I found that other people had already built something like this and gave me the inspiration to give it a shot! My plan is to have a multi-modal assistant, meaning havign something that changes to my needs. At some point it can be a clock, it could be artwork, a spotify player, an AI assistant, and so many other things!
+
+      I want to open source this for other builders but I have yet to start! But soon!
+    `,
+    shown: true,
+  },
   // GT-Dent
   {
     id: "gt-dent",
@@ -257,92 +459,6 @@ export const projects: ProjectType[] = [
       This project taught me a lot about building practical, industry-specific solutions and the importance of user-friendly design in healthcare applications. The migration from Java to web technologies also gave me valuable experience in modernizing legacy applications while maintaining core functionality.
 
       The RAID NAS setup was super fun to build! I love working with physical stuff as well, so having something of both worlds was trully amazing! :D
-    `,
-    shown: true,
-  },
-  // Dots
-  {
-    id: "dots",
-    name: "Dots",
-    date: "Coming Soon...",
-    tag: "hardware",
-    subtitle: "Flip dot display and control software powered by AI",
-    accentColor: "#F87518",
-    icon: "icon.svg",
-    backdrop: "backdrop.png",
-    images: [],
-    links: [],
-    description: `
-      This is a project that I'm still planning and budgeting for LOL! But I've always loved physical and tangible tech, AKA hardware. I recently stumbled on something called a "flip-dot", which surprisingly is a very old technology but looks SUPER COOL! I like to think about them as old-school LED's LOL, it's essentially a two-state device which flips a tiny magnetic disc into two different positions. When it's magnetized to one pole it's white and when magnetized to the other it's black.
-
-      Researching a bit, I found that other people had already built something like this and gave me the inspiration to give it a shot! My plan is to have a multi-modal assistant, meaning havign something that changes to my needs. At some point it can be a clock, it could be artwork, a spotify player, an AI assistant, and so many other things!
-
-      I want to open source this for other builders but I have yet to start! But soon!
-    `,
-    shown: true,
-  },
-  // Clip-it
-  {
-    id: "clip-it",
-    name: "Clip-it",
-    date: "January 2024",
-    tag: "iOS app",
-    subtitle: "...",
-    accentColor: "#F87518",
-    icon: "icon.svg",
-    backdrop: "backdrop.png",
-    images: [
-      {
-        src:"1.png", 
-        width: 900, 
-        height: 1900, 
-        aspect_ratio: "8 / 18"
-      },
-      {
-        src:"2.png", 
-        width: 900, 
-        height: 1900, 
-        aspect_ratio: "8 / 16"
-      },
-      {
-        src:"3.png", 
-        width: 900, 
-        height: 1900, 
-        aspect_ratio: "8 / 16"
-      },
-      {
-        src:"4.png", 
-        width: 900, 
-        height: 1900, 
-        aspect_ratio: "8 / 16"
-      },
-      {
-        src:"5.png", 
-        width: 900, 
-        height: 1900,  
-        aspect_ratio: "8 / 16"
-      },
-      {
-        src:"6.png", 
-        width: 900, 
-        height: 1900,  
-        aspect_ratio: "8 / 16"
-      },
-    ],
-    links: [
-      {
-        name: "repo",
-        link: "https://github.com/Diegogtz03/clip-it"
-      },
-      {
-        name: "x post",
-        link: "https://x.com/diego_trevin/status/1762341139690959050"
-      }
-    ],
-    description: `
-      Clip-it was my 2024 WWDC student challenge submission. Inspired by my grandfather's Alzheimer's diagnosis, I created this iPhone app to help people cherish and preserve their daily moments and memories. The app allows users to quickly capture photos and audio recordings with annotations - whether it's a great song heard at the mall or a tasty snack at a friend's house. Built specifically for iOS, Clip-it serves as a reminder to value life's small but meaningful experiences, while honoring those affected by memory loss conditions. The app features an intuitive interface for recording, annotating and reviewing memories, though some features like photo capture require physical device testing rather than simulation.
-
-      I'm a fan of music, so having something that I can quickly grab and capture an audio is an amazing feature to me. Compared to things like Shazam, this allows to to have a place to re-listen to the recording, giving you an opportunity to maybe find the song. The amount of times this has happend to me is unbelievable!
     `,
     shown: true,
   },

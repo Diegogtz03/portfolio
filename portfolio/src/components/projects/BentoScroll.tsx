@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 
 const image_url = "https://guti.sfo3.digitaloceanspaces.com/projects";
-const row_span_sequence_lg = [5, 2, 3, 3, 2, 2, 3, 5, 3, 2, 5];
+const row_span_sequence_lg = [5, 2, 3, 3, 2, 2, 3, 5, 3, 2, 5, 3, 2];
 
 export default function BentoScroll({
   projects,
